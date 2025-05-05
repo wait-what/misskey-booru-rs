@@ -1,0 +1,13 @@
+[account]
+token = "asd"
+instance_url = "https://miruku.cafe"
+
+[post]
+interval = 3600 # seconds
+message = "Look it's Megumin!"
+append_post_url = true
+visibility = "followers" # | public | home
+
+[gelbooru]
+booru_url = "https://gelbooru.com"
+tags = ["megumin", "rating:safe"]

@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  bot:
+    build: .
+    restart: on-failure
+    volumes:
+      - ./config.toml:/app/config.toml:ro
