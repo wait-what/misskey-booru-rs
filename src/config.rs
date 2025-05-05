@@ -24,7 +24,7 @@ impl Config {
             instance_url: toml.get("account.instance_url").unwrap().str().to_string(),
             message: toml.get("post.message").unwrap().str().to_string(),
             append_post_url: toml.get("post.append_post_url").unwrap().boolean(),
-            post_interval: toml.get("post.interval").unwrap().num() as f64,
+            post_interval: toml.get("post.interval").unwrap().num(),
             visibility: toml.get("post.visibility").unwrap().str().into(),
             booru_url: toml.get("gelbooru.booru_url").unwrap().str().to_string(),
             #[rustfmt::skip]

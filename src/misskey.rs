@@ -33,17 +33,19 @@ impl From<&str> for PostVisibility {
 
 impl<'a> MisskeyClient<'a> {
     pub fn new(token: &'a str, base_url: &'a str) -> Self {
-        Self {
-            token,
-            base_url,
-        }
+        Self { token, base_url }
     }
 
     pub fn upload_file_from_url(&self, url: &str) -> Result<&str, ()> {
         todo!()
     }
 
-    pub fn post_message(&self, content: &str, attachments: Vec<&str>, visibility: PostVisibility) ->  Result<(), ()> {
+    pub fn post_message(
+        &self,
+        content: &str,
+        attachments: Vec<&str>,
+        visibility: PostVisibility,
+    ) -> Result<(), ()> {
         todo!()
     }
 }

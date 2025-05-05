@@ -18,7 +18,9 @@ fn main() {
 
     loop {
         let gelbooru_post = GelbooruPost::new_random(&config.booru_url, &config.tags).unwrap();
-        let file_id = client.upload_file_from_url(&gelbooru_post.file_url).unwrap();
+        let file_id = client
+            .upload_file_from_url(&gelbooru_post.file_url)
+            .unwrap();
         // todo: error handling
 
         let message = if config.append_post_url {
