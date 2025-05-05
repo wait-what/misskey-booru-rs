@@ -1,3 +1,5 @@
+use nanoserde::{DeJson, SerJson};
+
 pub struct MisskeyClient<'a> {
     token: &'a str,
     base_url: &'a str,
@@ -31,21 +33,23 @@ impl From<&str> for PostVisibility {
     }
 }
 
+pub type FileId = String;
+
 impl<'a> MisskeyClient<'a> {
     pub fn new(token: &'a str, base_url: &'a str) -> Self {
         Self { token, base_url }
     }
 
-    pub fn upload_file_from_url(&self, url: &str) -> Result<&str, ()> {
+    pub fn upload_file_from_url(&self, url: &str) -> Result<FileId, String> {
+        // https://miruku.cafe/api-doc#tag/drive/POST/drive/files/upload-from-url
+
         todo!()
     }
 
-    pub fn post_message(
-        &self,
-        content: &str,
-        attachments: Vec<&str>,
-        visibility: PostVisibility,
-    ) -> Result<(), ()> {
+    #[rustfmt::skip]
+    pub fn post_message(&self, content: &str, attachments: Vec<FileId>, visibility: PostVisibility) -> Result<(), String> {
+        // https://miruku.cafe/api-doc#tag/notes/POST/notes/create
+
         todo!()
     }
 }

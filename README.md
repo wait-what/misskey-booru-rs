@@ -1,3 +1,5 @@
+# UNFINISHED
+
 # misskey-booru-rs
 Bot for Misskey that posts an image from Gelbooru every n seconds. Supports running in Docker.
 

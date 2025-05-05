@@ -1,3 +1,5 @@
+use nanoserde::DeJson;
+
 pub struct GelbooruPost {
     pub file_url: String,
     pub post_url: String,
