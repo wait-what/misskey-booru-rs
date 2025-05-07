@@ -17,6 +17,7 @@ fn main() {
     loop {
         println!("Posting image...");
         let gelbooru_post = GelbooruPost::new_random(&config.booru_url, &config.tags).unwrap(); // todo: error handling
+        println!("Gelbooru post: {}", gelbooru_post.post_url);
         let file_id = {
             let file_name = gelbooru_post.file_url.split('/').last().unwrap();
 
