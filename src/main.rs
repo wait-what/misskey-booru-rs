@@ -15,16 +15,21 @@ fn main() {
     let client = MisskeyClient::new(&config.token, &config.instance_url);
 
     loop {
-        println!("Posting image...");
+        println!("Searching for a random post...");
         let gelbooru_post = GelbooruPost::new_random(&config.booru_url, &config.tags).unwrap(); // todo: error handling
-        println!("Gelbooru post: {}", gelbooru_post.post_url);
+        println!("Found post: {}", gelbooru_post.post_url);
+
         let file_id = {
             let file_name = gelbooru_post.file_url.split('/').last().unwrap();
 
             // Check if the file already exists to avoid re-uploading
             match client.find_file_by_name(file_name) {
-                Ok(file_id) => file_id,
+                Ok(file_id) => {
+                    println!("Skipping upload to misskey: {}", file_id);
+                    file_id
+                },
                 Err(_) => {
+                    println!("Uploading to misskey...");
                     client
                         .upload_file_from_url(&gelbooru_post.file_url)
                         .unwrap() // todo: error handling
