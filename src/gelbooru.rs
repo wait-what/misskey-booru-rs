@@ -36,10 +36,9 @@ impl GelbooruPost {
             Err(error) => return Err(error.to_string())
         };
         let response = GelbooruResponse::deserialize_json(&body).unwrap();
-        let max_page = response.attributes.count;
 
         // Select a random post
-        let page = rand::random::<u32>() % max_page;
+        let page = rand::random::<u32>() % response.attributes.count;
 
         // Search again to get the selected post
         let query = format!(
