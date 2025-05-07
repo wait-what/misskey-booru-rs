@@ -40,6 +40,12 @@ impl<'a> MisskeyClient<'a> {
         Self { token, base_url }
     }
 
+    pub fn find_file_by_name(&self, name: &str) -> Result<FileId, String> {
+        // https://miruku.cafe/api-doc#tag/drive/POST/drive/files/find
+
+        todo!()
+    }
+
     pub fn upload_file_from_url(&self, url: &str) -> Result<FileId, String> {
         // https://miruku.cafe/api-doc#tag/drive/POST/drive/files/upload-from-url
 
