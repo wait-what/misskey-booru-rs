@@ -2,7 +2,7 @@ use std::thread;
 use std::time::Duration;
 
 mod gelbooru;
-use gelbooru::GelbooruPost;
+use gelbooru::Post;
 
 mod misskey;
 use misskey::MisskeyClient;
@@ -16,7 +16,7 @@ fn main() {
 
     loop {
         println!("Searching for a random post...");
-        let gelbooru_post = GelbooruPost::new_random(&config.booru_url, &config.tags).unwrap(); // todo: error handling
+        let gelbooru_post = Post::new_random(&config.booru_url, &config.tags).unwrap(); // todo: error handling
         println!("Found post: {}", gelbooru_post.post_url);
 
         let file_id = {

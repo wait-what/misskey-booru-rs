@@ -1,29 +1,29 @@
 use nanoserde::DeJson;
 
-pub struct GelbooruPost {
+pub struct Post {
     pub file_url: String,
     pub post_url: String,
 }
 
 #[derive(DeJson)]
-struct GelbooruResponse {
+struct Response {
     #[nserde(rename = "@attributes")]
-    attributes: GelbooruResponseAttributes,
-    post: [GelbooruResponsePost; 1],
+    attributes: ResponseAttributes,
+    post: [ResponsePost; 1],
 }
 
 #[derive(DeJson)]
-struct GelbooruResponseAttributes {
+struct ResponseAttributes {
     count: u32,
 }
 
 #[derive(DeJson)]
-struct GelbooruResponsePost {
+struct ResponsePost {
     file_url: String,
     id: u32,
 }
 
-impl GelbooruPost {
+impl Post {
     pub fn new_random(booru_url: &str, tags: &Vec<String>) -> Result<Self, String> {
         // Search to get the count of posts
         let query = format!(
@@ -35,7 +35,7 @@ impl GelbooruPost {
             Ok(response) => response.into_body().read_to_string().unwrap(),
             Err(error) => return Err(error.to_string())
         };
-        let response = GelbooruResponse::deserialize_json(&body).unwrap();
+        let response = Response::deserialize_json(&body).unwrap();
 
         // Select a random post
         let page = rand::random::<u32>() % response.attributes.count;
@@ -51,7 +51,7 @@ impl GelbooruPost {
             Ok(response) => response.into_body().read_to_string().unwrap(),
             Err(error) => return Err(error.to_string())
         };
-        let response = GelbooruResponse::deserialize_json(&body).unwrap();
+        let response = Response::deserialize_json(&body).unwrap();
         let post = response.post.get(0).unwrap(); // todo: error handling
 
         Ok(Self {
