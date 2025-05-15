@@ -41,9 +41,52 @@ impl<'a> MisskeyClient<'a> {
     }
 
     pub fn find_file_by_name(&self, name: &str) -> Result<FileId, String> {
-        // https://miruku.cafe/api-doc#tag/drive/POST/drive/files/find\
+        let request = {
+            #[derive(SerJson)]
+            struct Request {
+                name: String,
+            }
 
-        todo!()
+            Request {
+                name: name.to_string(),
+            }.serialize_json()
+        };
+
+        let api_call = ureq::post(format!("{}/api/drive/files/find", self.base_url))
+            .header("Authorization", format!("Bearer {}", self.token))
+            .header("Content-Type", "application/json")
+            .send(request);
+
+        let body = match api_call {
+            Ok(response) => match response.into_body().read_to_string() {
+                Ok(body) => body,
+                Err(error) => return Err(error.to_string()),
+            },
+            Err(error) => return Err(error.to_string()),
+        };
+
+        let response = {
+            #[derive(Debug, DeJson)]
+            struct DriveFile {
+                id: String,
+            }
+
+            #[derive(Debug, DeJson)]
+            struct Response {
+                files: Vec<DriveFile>,
+            }
+
+            // The response is a DriveFile[], and nanoserde doesn't support deserializing root arrays
+            match Response::deserialize_json(&format!("{{\"files\":{}}}", body)) {
+                Ok(response) => response,
+                Err(error) => return Err(error.to_string()),
+            }
+        };
+
+        match response.files.get(0) {
+            Some(file) => Ok(file.id.clone()),
+            None => Err("File not found".to_string()),
+        }
     }
 
     pub fn upload_file_from_url(&self, url: &str) -> Result<FileId, String> {
