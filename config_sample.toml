@@ -12,7 +12,7 @@ sensitive = false # | true
 [gelbooru]
 booru_url = "https://gelbooru.com" # no trailing slash!
 tags = ["megumin", "rating:general"]
-divisor = 1 # whole number. if there are 1000 posts and the divisor is 4, only the first 250 posts will be picked
+range = 0 # 0 for all posts | n for first n posts only
 
 [bot]
 post_interval = 3600 # seconds

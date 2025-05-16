@@ -6,7 +6,7 @@ pub struct GelbooruPost {
 }
 
 impl GelbooruPost {
-    pub fn new_random(booru_url: &str, tags: &Vec<String>, divisor: u32) -> Result<Self, String> {
+    pub fn new_random(booru_url: &str, tags: &Vec<String>, range: u32) -> Result<Self, String> {
         #[derive(DeJson)]
         struct Response {
             #[nserde(rename = "@attributes")]
@@ -44,7 +44,11 @@ impl GelbooruPost {
         };
 
         // Select a random post
-        let page = rand::random::<u32>() % (response.attributes.count / divisor);
+        let page = if range == 0 || range > response.attributes.count {
+            rand::random::<u32>() % response.attributes.count
+        } else {
+            rand::random::<u32>() % range
+        };
 
         // Search again to get the selected post
         let query = format!(

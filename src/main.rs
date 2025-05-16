@@ -20,7 +20,7 @@ fn main() {
 
     'post: loop {
         log::info!("Searching for a random post...");
-        let gelbooru_post = match GelbooruPost::new_random(&config.booru_url, &config.tags, config.divisor) {
+        let gelbooru_post = match GelbooruPost::new_random(&config.booru_url, &config.tags, config.range) {
             Ok(post) => {
                 log::info!("Found post: {}", post.post_url);
                 post
