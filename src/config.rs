@@ -8,10 +8,11 @@ pub struct Config {
     pub instance_url: String,
     pub message: String,
     pub append_post_url: bool,
-    pub post_interval: f64,
     pub visibility: PostVisibility,
     pub booru_url: String,
     pub tags: Vec<String>,
+    pub post_interval: f64,
+    pub error_timeout: f64,
 }
 
 impl Config {
@@ -24,11 +25,12 @@ impl Config {
             instance_url: toml.get("account.instance_url").unwrap().str().to_string(),
             message: toml.get("post.message").unwrap().str().to_string(),
             append_post_url: toml.get("post.append_post_url").unwrap().boolean(),
-            post_interval: toml.get("post.interval").unwrap().num(),
             visibility: toml.get("post.visibility").unwrap().str().into(),
             booru_url: toml.get("gelbooru.booru_url").unwrap().str().to_string(),
             #[rustfmt::skip]
             tags: toml.get("gelbooru.tags").unwrap().simple_arr().iter().map(|s| s.str().to_string()).collect(),
+            post_interval: toml.get("bot.post_interval").unwrap().num(),
+            error_timeout: toml.get("bot.error_timeout").unwrap().num(),
         };
 
         Ok(config)

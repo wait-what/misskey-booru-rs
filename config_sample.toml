@@ -1,13 +1,17 @@
 [account]
-token = "asd"
-instance_url = "https://miruku.cafe"
+token = "asdasdasd" # must have read:drive, write:drive, write:notes
+instance_url = "https://miruku.cafe" # no trailing slash!
 
 [post]
-interval = 3600 # seconds
-message = "Look it's Megumin!"
+message = """Look it's Megumin!
+#megumin"""
 append_post_url = true
 visibility = "followers" # | public | home
 
 [gelbooru]
-booru_url = "https://gelbooru.com"
-tags = ["megumin", "rating:safe"]
+booru_url = "https://gelbooru.com" # no trailing slash!
+tags = ["megumin", "rating:general"]
+
+[bot]
+post_interval = 3600 # seconds
+error_timeout = 30

@@ -11,6 +11,8 @@ lto = "fat"
 strip = "symbols"
 
 [dependencies]
+log = "0.4.27"
 nanoserde = "0.2.1"
+pretty_env_logger = "0.5.0"
 rand = "0.9.1"
 ureq = "3.0.11"

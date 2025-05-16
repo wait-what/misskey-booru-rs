@@ -1,30 +1,30 @@
 use nanoserde::DeJson;
 
-pub struct Post {
+pub struct GelbooruPost {
     pub file_url: String,
     pub post_url: String,
 }
 
-#[derive(DeJson)]
-struct Response {
-    #[nserde(rename = "@attributes")]
-    attributes: ResponseAttributes,
-    post: [ResponsePost; 1],
-}
-
-#[derive(DeJson)]
-struct ResponseAttributes {
-    count: u32,
-}
-
-#[derive(DeJson)]
-struct ResponsePost {
-    file_url: String,
-    id: u32,
-}
-
-impl Post {
+impl GelbooruPost {
     pub fn new_random(booru_url: &str, tags: &Vec<String>) -> Result<Self, String> {
+        #[derive(DeJson)]
+        struct Response {
+            #[nserde(rename = "@attributes")]
+            attributes: ResponseAttributes,
+            post: [ResponsePost; 1],
+        }
+
+        #[derive(DeJson)]
+        struct ResponseAttributes {
+            count: u32,
+        }
+
+        #[derive(DeJson)]
+        struct ResponsePost {
+            file_url: String,
+            id: u32,
+        }
+
         // Search to get the count of posts
         let query = format!(
             "{}/index.php?page=dapi&s=post&q=index&tags={}&json=1&limit=1",
@@ -32,10 +32,16 @@ impl Post {
             tags.join("+")
         );
         let body = match ureq::get(query).call() {
-            Ok(response) => response.into_body().read_to_string().unwrap(),
+            Ok(response) => match response.into_body().read_to_string() {
+                Ok(body) => body,
+                Err(error) => return Err(error.to_string()),
+            },
             Err(error) => return Err(error.to_string())
         };
-        let response = Response::deserialize_json(&body).unwrap();
+        let response = match Response::deserialize_json(&body) {
+            Ok(response) => response,
+            Err(error) => return Err(error.to_string())
+        };
 
         // Select a random post
         let page = rand::random::<u32>() % response.attributes.count;
@@ -48,11 +54,20 @@ impl Post {
             page
         );
         let body = match ureq::get(query).call() {
-            Ok(response) => response.into_body().read_to_string().unwrap(),
+            Ok(response) => match response.into_body().read_to_string() {
+                Ok(body) => body,
+                Err(error) => return Err(error.to_string()),
+            },
             Err(error) => return Err(error.to_string())
         };
-        let response = Response::deserialize_json(&body).unwrap();
-        let post = response.post.get(0).unwrap(); // todo: error handling
+        let response = match Response::deserialize_json(&body) {
+            Ok(response) => response,
+            Err(error) => return Err(error.to_string())
+        };
+        let post = match response.post.get(0) {
+            Some(post) => post,
+            None => return Err(format!("{} returned [] for {:?}", booru_url, tags)),
+        };
 
         Ok(Self {
             file_url: post.file_url.clone(),
