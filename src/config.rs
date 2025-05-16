@@ -32,7 +32,15 @@ impl Config {
             booru_url: toml.get("gelbooru.booru_url").unwrap().str().to_string(),
             #[rustfmt::skip]
             tags: toml.get("gelbooru.tags").unwrap().simple_arr().iter().map(|s| s.str().to_string()).collect(),
-            range: toml.get("gelbooru.range").unwrap().num() as u32,
+            range: {
+                let range = toml.get("gelbooru.range").unwrap().num() as u32;
+                if range > 20000 {
+                    log::warn!("Range is over 20000, setting to 20000");
+                    20000
+                } else {
+                    range
+                }
+            },
             post_interval: toml.get("bot.post_interval").unwrap().num(),
             error_timeout: toml.get("bot.error_timeout").unwrap().num(),
         };

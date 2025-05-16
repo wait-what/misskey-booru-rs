@@ -36,16 +36,22 @@ impl GelbooruPost {
                 Ok(body) => body,
                 Err(error) => return Err(error.to_string()),
             },
-            Err(error) => return Err(error.to_string())
+            Err(error) => return Err(error.to_string()),
         };
         let response = match Response::deserialize_json(&body) {
             Ok(response) => response,
-            Err(error) => return Err(error.to_string())
+            Err(error) => return Err(error.to_string()),
         };
 
         // Select a random post
-        let page = if range == 0 || range > response.attributes.count {
-            rand::random::<u32>() % response.attributes.count
+        // Gelbooru will not let you search with a page over 20000
+        let mut post_count = response.attributes.count;
+        if post_count > 20000 {
+            post_count = 20000;
+        }
+
+        let page = if range == 0 || range > post_count {
+            rand::random::<u32>() % post_count
         } else {
             rand::random::<u32>() % range
         };
@@ -62,11 +68,11 @@ impl GelbooruPost {
                 Ok(body) => body,
                 Err(error) => return Err(error.to_string()),
             },
-            Err(error) => return Err(error.to_string())
+            Err(error) => return Err(error.to_string()),
         };
         let response = match Response::deserialize_json(&body) {
             Ok(response) => response,
-            Err(error) => return Err(error.to_string())
+            Err(error) => return Err(error.to_string()),
         };
         let post = match response.post.get(0) {
             Some(post) => post,
@@ -75,10 +81,7 @@ impl GelbooruPost {
 
         Ok(Self {
             file_url: post.file_url.clone(),
-            post_url: format!(
-                "{}/index.php?page=post&s=view&id={}",
-                booru_url, post.id
-            ),
+            post_url: format!("{}/index.php?page=post&s=view&id={}", booru_url, post.id),
         })
     }
 }
