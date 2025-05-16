@@ -9,6 +9,7 @@ pub struct Config {
     pub message: String,
     pub append_post_url: bool,
     pub visibility: PostVisibility,
+    pub sensitive: bool,
     pub booru_url: String,
     pub tags: Vec<String>,
     pub post_interval: f64,
@@ -26,6 +27,7 @@ impl Config {
             message: toml.get("post.message").unwrap().str().to_string(),
             append_post_url: toml.get("post.append_post_url").unwrap().boolean(),
             visibility: toml.get("post.visibility").unwrap().str().into(),
+            sensitive: toml.get("post.sensitive").unwrap().boolean(),
             booru_url: toml.get("gelbooru.booru_url").unwrap().str().to_string(),
             #[rustfmt::skip]
             tags: toml.get("gelbooru.tags").unwrap().simple_arr().iter().map(|s| s.str().to_string()).collect(),

@@ -90,14 +90,16 @@ impl<'a> MisskeyClient<'a> {
     }
 
     // https://miruku.cafe/api-doc#tag/drive/POST/drive/files/upload-from-url
-    pub fn upload_file_from_url(&self, url: &str) -> Result<(), String> {
+    pub fn upload_file_from_url(&self, url: &str, is_sensitive: bool) -> Result<(), String> {
         let request = {
             #[derive(SerJson)]
             struct Request<'a> {
                 url: &'a str,
+                #[nserde(rename = "isSensitive")]
+                is_sensitive: bool,
             }
 
-            Request { url }.serialize_json()
+            Request { url, is_sensitive }.serialize_json()
         };
 
         let api_call = ureq::post(format!("{}/api/drive/files/upload-from-url", self.base_url))

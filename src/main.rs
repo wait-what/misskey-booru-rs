@@ -44,7 +44,7 @@ fn main() {
                 },
                 Err(_) => {
                     log::info!("Requesting Misskey to download the file...");
-                    match client.upload_file_from_url(&gelbooru_post.file_url) {
+                    match client.upload_file_from_url(&gelbooru_post.file_url, config.sensitive) {
                         Ok(_) => (),
                         Err(error) => {
                             log::error!("Failed to upload file: {}", error);
