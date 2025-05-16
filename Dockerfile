@@ -7,4 +7,4 @@ run cargo install --path .
 from alpine:latest
 copy --from=builder /usr/local/cargo/bin/misskey-booru-rs /usr/local/bin/misskey-booru-rs
 
-cmd ['misskey-booru-rs']
+entrypoint /usr/local/bin/misskey-booru-rs
