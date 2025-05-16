@@ -43,7 +43,7 @@ fn main() {
                     file_id
                 },
                 Err(_) => {
-                    log::info!("Requesting Misskey to download the file...");
+                    log::info!("Requesting Misskey to download {}", gelbooru_post.file_url);
                     match client.upload_file_from_url(&gelbooru_post.file_url, config.sensitive) {
                         Ok(_) => (),
                         Err(error) => {
@@ -54,8 +54,8 @@ fn main() {
                         },
                     };
 
-                    // Search for the file_id again after upload
-                    // It may take some time for the file to be uploaded, so we check every 3 seconds
+                    // Search for the file_id again after requesting download
+                    // It may take some time for the file to be uploaded, so we check every 3 seconds up to 10 times
                     log::info!("Waiting for Misskey to download the file...");
                     let mut attempts = 0;
                     loop {
