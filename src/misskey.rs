@@ -96,9 +96,28 @@ impl<'a> MisskeyClient<'a> {
     }
 
     #[rustfmt::skip]
-    pub fn post_message(&self, content: &str, attachments: Vec<FileId>, visibility: PostVisibility) -> Result<(), String> {
-        // https://miruku.cafe/api-doc#tag/notes/POST/notes/create
+    pub fn post_message(&self, content: &str, attachments: Vec<FileId>, visibility: PostVisibility) -> Result<ureq::http::Response<ureq::Body>, ureq::Error> {
 
-        todo!()
+        let url = format!("{}/api/notes/create", self.base_url);
+
+        let request = {
+            #[derive(SerJson)]
+            struct Request {
+                visibility: String,
+                fileIds: Vec<FileId>,
+                text: String,
+            }
+
+            Request {
+                visibility: visibility.into(),
+                fileIds: attachments,
+                text: content.to_string(),
+            }.serialize_json()
+        };
+
+        ureq::post(url)
+        .header("Content-Type", "application/json")
+        .header("Authorization", format!("Bearer {}",self.token))
+        .send_json(request)
     }
 }
