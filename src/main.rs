@@ -2,7 +2,7 @@ use std::thread;
 use std::time::Duration;
 
 mod gelbooru;
-use gelbooru::GelbooruPost;
+use gelbooru::{GelbooruPost, GelbooruConfig};
 
 mod misskey;
 use misskey::MisskeyClient;
@@ -18,9 +18,15 @@ fn main() {
     let config = Config::new("config.toml").unwrap();
     let client = MisskeyClient::new(&config.token, &config.instance_url);
 
+    let gelbooru_config = GelbooruConfig::new(
+        config.booru_url,
+        config.api_key,
+        config.user_id,
+    );
+
     'post: loop {
         log::info!("Searching for a random post...");
-        let gelbooru_post = match GelbooruPost::new_random(&config.booru_url, &config.tags, config.range) {
+        let gelbooru_post = match GelbooruPost::new_random(&gelbooru_config, &config.tags, config.range) {
             Ok(post) => {
                 log::info!("Found post: {}", post.post_url);
                 post

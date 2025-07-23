@@ -11,6 +11,8 @@ sensitive = false # | true
 
 [gelbooru]
 booru_url = "https://gelbooru.com" # no trailing slash!
+api_key = "asdasdasd" # optional, get on https://gelbooru.com/index.php?page=account&s=options after signing in
+user_id = "123123123"
 tags = ["megumin", "rating:general"]
 range = 0 # 0 for all posts | n for first n posts only (limited to 20000)
 
